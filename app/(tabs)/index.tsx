@@ -1,31 +1,105 @@
-import { StyleSheet } from 'react-native';
+import { Text, View, useThemeColor } from "@/components/Themed";
+import { useAuth } from "@/context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-
-export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+const HomeScreen = () => {
+  const { user } = useAuth();
+  const cardColor = useThemeColor(
+    { light: "#FFFFFF", dark: "#1C1C1E" },
+    "background"
   );
-}
+  const shadowColor = useThemeColor(
+    { light: "#000", dark: "#000" },
+    "background"
+  );
+  const secondaryText = useThemeColor({}, "textSecondary");
+
+  return (
+    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      <View style={styles.content}>
+        <Image
+          source={require("@/assets/images/onboarding1.svg")}
+          style={styles.image}
+          contentFit="contain"
+        />
+        <Text style={styles.title}>Welcome, {user?.name || "User"}!</Text>
+        <Text style={[styles.subtitle, { color: secondaryText }]}>
+          It's great to see you.
+        </Text>
+
+        <View
+          style={[styles.infoCard, { backgroundColor: cardColor, shadowColor }]}
+        >
+          <Ionicons
+            name="mail"
+            size={24}
+            color={secondaryText}
+            style={styles.icon}
+          />
+          <View>
+            <Text style={styles.cardTitle}>Your Email</Text>
+            <Text style={[styles.cardText, { color: secondaryText }]}>
+              {user?.email}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  image: {
+    width: 250,
+    height: 250,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontFamily: "Outfit_600SemiBold",
+    marginBottom: 10,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  subtitle: {
+    fontSize: 18,
+    fontFamily: "Outfit_500Medium",
+    marginBottom: 30,
+  },
+  infoCard: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  icon: {
+    marginRight: 15,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontFamily: "Outfit_600SemiBold",
+    marginBottom: 2,
+  },
+  cardText: {
+    fontSize: 14,
+    fontFamily: "Outfit_400Regular",
   },
 });
+
+export default HomeScreen;

@@ -1,3 +1,4 @@
+import AuthSheet, { AuthSheetRef } from "@/components/auth/AuthSheet";
 import OnboardingFooter from "@/components/Onboarding/OnboardingFooter";
 import OnboardingSlide from "@/components/Onboarding/OnboardingSlide";
 import { Text, View, useThemeColor } from "@/components/Themed";
@@ -39,13 +40,13 @@ const OnboardingScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
+  const authSheetRef = useRef<AuthSheetRef>(null);
 
   const backgroundColor = useThemeColor({}, "background");
   const textSecondaryColor = useThemeColor({}, "textSecondary");
 
   const handleGetStarted = useCallback(() => {
-    // navigation.navigate("Login");
-    console.log("Navigate to Login");
+    authSheetRef.current?.present();
   }, []);
 
   const handleNext = useCallback(() => {
@@ -106,6 +107,8 @@ const OnboardingScreen = () => {
         onNextPress={handleNext}
         onGetStartedPress={handleGetStarted}
       />
+
+      <AuthSheet ref={authSheetRef} />
     </SafeAreaView>
   );
 };
