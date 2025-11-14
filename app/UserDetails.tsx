@@ -1,25 +1,11 @@
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
+import { useTheme } from "@/hooks/useTheme";
+import { fetchUserDetails } from "@/services/api";
+import { ApiUser } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
-
-interface ApiUser {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  website: string;
-  username: string;
-  address: {
-    street: string;
-    city: string;
-    zipcode: string;
-  };
-  company: {
-    name: string;
-  };
-}
 
 const InfoRow = ({
   icon,
@@ -30,17 +16,17 @@ const InfoRow = ({
   label: string;
   value: string;
 }) => {
-  const secondaryText = useThemeColor({}, "textSecondary");
+  const colors = useTheme();
   return (
     <View style={styles.infoRow}>
       <Ionicons
         name={icon}
         size={20}
-        color={secondaryText}
+        color={colors.textSecondary}
         style={styles.infoIcon}
       />
       <View style={styles.infoTextContainer}>
-        <Text style={[styles.infoLabel, { color: secondaryText }]}>
+        <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>
           {label}
         </Text>
         <Text style={styles.infoValue}>{value}</Text>
@@ -49,18 +35,9 @@ const InfoRow = ({
   );
 };
 
-const UserDetails = () => {
+const UserDetailsScreen = () => {
   const { userId } = useLocalSearchParams<{ userId: string }>();
-  const tint = useThemeColor({}, "tint");
-  const cardColor = useThemeColor(
-    { light: "#FFFFFF", dark: "#1C1C1E" },
-    "background"
-  );
-  const shadowColor = useThemeColor(
-    { light: "#000", dark: "#000" },
-    "background"
-  );
-  const secondaryText = useThemeColor({}, "textSecondary");
+  const colors = useTheme();
 
   const [user, setUser] = useState<ApiUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -69,11 +46,8 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          `https://jsonplaceholder.typicode.com/users/${userId}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch user data");
-        const data = await response.json();
+        setError(null);
+        const data = await fetchUserDetails(Number(userId));
         setUser(data);
       } catch (e: any) {
         setError(e.message);
@@ -86,38 +60,45 @@ const UserDetails = () => {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={tint} />
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.tint} />
       </View>
     );
   }
 
   if (error || !user) {
     return (
-      <View style={styles.centered}>
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
         <Text>Error: {error || "User not found"}</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Stack.Screen
         options={{ headerTitleStyle: { fontFamily: "Outfit_600SemiBold" } }}
       />
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Ionicons name="person" size={40} color={tint} />
+        <View
+          style={[styles.avatar, { backgroundColor: colors.avatarBackground }]}
+        >
+          <Ionicons name="person" size={40} color={colors.tint} />
         </View>
         <Text style={styles.name}>{user.name}</Text>
-        <Text style={[styles.username, { color: secondaryText }]}>
+        <Text style={[styles.username, { color: colors.textSecondary }]}>
           @{user.username}
         </Text>
       </View>
 
       <View style={styles.content}>
         <View
-          style={[styles.infoCard, { backgroundColor: cardColor, shadowColor }]}
+          style={[
+            styles.infoCard,
+            { backgroundColor: colors.card, shadowColor: colors.shadow },
+          ]}
         >
           <Text style={styles.cardTitle}>Contact Info</Text>
           <InfoRow icon="mail-outline" label="Email" value={user.email} />
@@ -126,7 +107,10 @@ const UserDetails = () => {
         </View>
 
         <View
-          style={[styles.infoCard, { backgroundColor: cardColor, shadowColor }]}
+          style={[
+            styles.infoCard,
+            { backgroundColor: colors.card, shadowColor: colors.shadow },
+          ]}
         >
           <Text style={styles.cardTitle}>Address</Text>
           <InfoRow
@@ -137,7 +121,10 @@ const UserDetails = () => {
         </View>
 
         <View
-          style={[styles.infoCard, { backgroundColor: cardColor, shadowColor }]}
+          style={[
+            styles.infoCard,
+            { backgroundColor: colors.card, shadowColor: colors.shadow },
+          ]}
         >
           <Text style={styles.cardTitle}>Company</Text>
           <InfoRow
@@ -168,7 +155,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "rgba(0,122,255,0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
@@ -183,6 +169,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+    paddingTop: 0,
   },
   infoCard: {
     padding: 20,
@@ -190,7 +177,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 5,
     marginBottom: 20,
   },
   cardTitle: {
@@ -220,4 +207,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserDetails;
+export default UserDetailsScreen;

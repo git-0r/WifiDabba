@@ -1,5 +1,6 @@
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React from "react";
@@ -8,18 +9,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const { user } = useAuth();
-  const cardColor = useThemeColor(
-    { light: "#FFFFFF", dark: "#1C1C1E" },
-    "background"
-  );
-  const shadowColor = useThemeColor(
-    { light: "#000", dark: "#000" },
-    "background"
-  );
-  const secondaryText = useThemeColor({}, "textSecondary");
+  const colors = useTheme();
 
   return (
-    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <View style={styles.content}>
         <Image
           source={require("@/assets/images/onboarding1.svg")}
@@ -27,22 +22,25 @@ const HomeScreen = () => {
           contentFit="contain"
         />
         <Text style={styles.title}>Welcome, {user?.name || "User"}!</Text>
-        <Text style={[styles.subtitle, { color: secondaryText }]}>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           It's great to see you.
         </Text>
 
         <View
-          style={[styles.infoCard, { backgroundColor: cardColor, shadowColor }]}
+          style={[
+            styles.infoCard,
+            { backgroundColor: colors.card, shadowColor: colors.shadow },
+          ]}
         >
           <Ionicons
             name="mail"
             size={24}
-            color={secondaryText}
+            color={colors.textSecondary}
             style={styles.icon}
           />
           <View>
             <Text style={styles.cardTitle}>Your Email</Text>
-            <Text style={[styles.cardText, { color: secondaryText }]}>
+            <Text style={[styles.cardText, { color: colors.textSecondary }]}>
               {user?.email}
             </Text>
           </View>
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 5,
   },
   icon: {
     marginRight: 15,

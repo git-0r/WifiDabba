@@ -1,7 +1,8 @@
-import AuthSheet, { AuthSheetRef } from "@/components/auth/AuthSheet";
 import OnboardingFooter from "@/components/Onboarding/OnboardingFooter";
 import OnboardingSlide from "@/components/Onboarding/OnboardingSlide";
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
+import AuthSheet, { AuthSheetRef } from "@/components/auth/AuthSheet";
+import { useTheme } from "@/hooks/useTheme";
 import { OnboardingStep } from "@/types";
 import React, { useCallback, useRef, useState } from "react";
 import {
@@ -42,8 +43,7 @@ const OnboardingScreen = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const authSheetRef = useRef<AuthSheetRef>(null);
 
-  const backgroundColor = useThemeColor({}, "background");
-  const textSecondaryColor = useThemeColor({}, "textSecondary");
+  const colors = useTheme();
 
   const handleGetStarted = useCallback(() => {
     authSheetRef.current?.present();
@@ -72,10 +72,14 @@ const OnboardingScreen = () => {
   }).current;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       {currentIndex < onboardingSteps.length - 1 && (
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={[styles.skipButtonText, { color: textSecondaryColor }]}>
+          <Text
+            style={[styles.skipButtonText, { color: colors.textSecondary }]}
+          >
             Skip
           </Text>
         </TouchableOpacity>

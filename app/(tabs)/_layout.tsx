@@ -27,6 +27,9 @@ export default function TabLayout() {
         headerTitleStyle: {
           fontFamily: "Outfit_600SemiBold",
         },
+        tabBarLabelStyle: {
+          fontFamily: "Outfit_400Regular",
+        },
       }}
     >
       <Tabs.Screen
@@ -39,7 +42,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="settings"
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (

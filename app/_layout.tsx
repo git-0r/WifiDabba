@@ -75,7 +75,6 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Protected guard={!!user}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack.Protected>
         <Stack.Protected guard={!user}>
           <Stack.Screen name="OnBoarding" options={{ headerShown: false }} />

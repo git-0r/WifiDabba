@@ -1,9 +1,8 @@
-import { Text, useThemeColor } from "@/components/Themed";
-import Colors from "@/constants/Colors";
+import { Text, View } from "@/components/Themed";
+import { useTheme } from "@/hooks/useTheme";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, {
   forwardRef,
@@ -18,15 +17,10 @@ import SignUpForm from "./SignUpForm";
 export interface AuthSheetRef {
   present: () => void;
 }
-
 type ModalContentState = "options" | "signUp";
 
 const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
-  const backgroundColor = useThemeColor({}, "background");
-  const tintColor = useThemeColor({}, "tint");
-  const buttonTextColor = useThemeColor({}, "buttonText");
-
-  // Bottom Sheet state
+  const colors = useTheme();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const snapPoints = useMemo(() => ["50%"], []);
@@ -44,33 +38,28 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
   const renderModalContent = () => {
     if (modalContent === "options") {
       return (
-        <BottomSheetView style={styles.modalContent}>
+        <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Get Started</Text>
-          <Text
-            style={styles.modalSubtitle}
-            lightColor={Colors.light.textSecondary}
-            darkColor={Colors.dark.textSecondary}
-          >
+          <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]}>
             Choose how you'd like to sign up.
           </Text>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: tintColor }]}
+            style={[styles.button, { backgroundColor: colors.tint }]}
             onPress={() => setModalContent("signUp")}
           >
-            <Text style={[styles.buttonText, { color: buttonTextColor }]}>
+            <Text style={[styles.buttonText, { color: colors.buttonText }]}>
               Sign Up with Email
             </Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={() => alert("Login not implemented yet")}
           >
-            <Text style={[styles.secondaryButtonText, { color: tintColor }]}>
+            <Text style={[styles.secondaryButtonText, { color: colors.tint }]}>
               Or Login
             </Text>
           </TouchableOpacity>
-        </BottomSheetView>
+        </View>
       );
     }
 
@@ -87,10 +76,8 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
         ref={bottomSheetRef}
         index={0}
         snapPoints={snapPoints}
-        backgroundStyle={{ backgroundColor }}
-        style={styles.modalContainer}
-        enableDynamicSizing={false}
-        // handleIndicatorStyle={{ display: "none" }}
+        backgroundStyle={{ backgroundColor: colors.background }}
+        style={[styles.modalContainer, { shadowColor: colors.shadow }]}
       >
         {renderModalContent()}
       </BottomSheetModal>
@@ -100,11 +87,7 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: -10,
-    },
+    shadowOffset: { width: 0, height: -10 },
     shadowOpacity: 0.1,
     shadowRadius: 8.0,
     elevation: 20,

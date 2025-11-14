@@ -1,5 +1,6 @@
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
 import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
@@ -9,23 +10,16 @@ interface SignUpFormProps {
 
 const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   const { signUp } = useAuth();
+  const colors = useTheme();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-
-  const tintColor = useThemeColor({}, "tint");
-  const buttonTextColor = useThemeColor({}, "buttonText");
-  const textColor = useThemeColor({}, "text");
-  const placeholderColor = useThemeColor({}, "textSecondary");
-  const borderColor = useThemeColor({}, "tint");
 
   const handleSignUp = async () => {
     if (!name || !email) {
       Alert.alert("Error", "Please fill in both name and email.");
       return;
     }
-
     const success = await signUp(name, email);
-
     if (success) {
       onSuccess();
     } else {
@@ -36,33 +30,30 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create your Account</Text>
-
       <TextInput
-        style={[styles.input, { color: textColor, borderColor }]}
+        style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
         placeholder="Name"
         value={name}
         onChangeText={setName}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={colors.textSecondary}
       />
-
       <TextInput
-        style={[styles.input, { color: textColor, borderColor }]}
+        style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={colors.textSecondary}
       />
-
       <TouchableOpacity
         style={[
           styles.button,
-          { backgroundColor: tintColor, shadowColor: tintColor },
+          { backgroundColor: colors.tint, shadowColor: colors.shadow },
         ]}
         onPress={handleSignUp}
       >
-        <Text style={[styles.buttonText, { color: buttonTextColor }]}>
+        <Text style={[styles.buttonText, { color: colors.buttonText }]}>
           Sign Up
         </Text>
       </TouchableOpacity>

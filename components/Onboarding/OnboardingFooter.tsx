@@ -1,4 +1,5 @@
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
+import { useTheme } from "@/hooks/useTheme";
 import { OnboardingStep } from "@/types";
 import React from "react";
 import {
@@ -25,8 +26,7 @@ const OnboardingFooter = ({
   onNextPress,
   onGetStartedPress,
 }: OnboardingFooterProps) => {
-  const tintColor = useThemeColor({}, "tint");
-  const buttonTextColor = useThemeColor({}, "buttonText");
+  const colors = useTheme();
   const isLastSlide = currentIndex === data.length - 1;
 
   const renderAnimatedPagination = () => {
@@ -56,7 +56,7 @@ const OnboardingFooter = ({
               key={index}
               style={[
                 styles.dot,
-                { width: dotWidth, opacity, backgroundColor: tintColor },
+                { width: dotWidth, opacity, backgroundColor: colors.tint },
               ]}
             />
           );
@@ -72,11 +72,11 @@ const OnboardingFooter = ({
         <TouchableOpacity
           style={[
             styles.button,
-            { backgroundColor: tintColor, shadowColor: tintColor },
+            { backgroundColor: colors.tint, shadowColor: colors.shadow },
           ]}
           onPress={isLastSlide ? onGetStartedPress : onNextPress}
         >
-          <Text style={[styles.buttonText, { color: buttonTextColor }]}>
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>
             {isLastSlide ? "Get Started" : "Continue"}
           </Text>
         </TouchableOpacity>
@@ -101,9 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 4,
   },
-  buttonContainer: {
-    // No styles
-  },
+  buttonContainer: {},
   button: {
     paddingVertical: 16,
     borderRadius: 12,

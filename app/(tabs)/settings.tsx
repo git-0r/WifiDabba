@@ -1,5 +1,6 @@
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/hooks/useTheme";
 import { fetchUsers } from "@/services/api";
 import { ApiUser } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,19 +16,9 @@ import {
 } from "react-native";
 
 const SettingsScreen = () => {
-  const { user: loggedInUser, signOut } = useAuth();
+  const colors = useTheme();
   const router = useRouter();
-  const tint = useThemeColor({}, "tint");
-  const cardColor = useThemeColor(
-    { light: "#FFFFFF", dark: "#1C1C1E" },
-    "background"
-  );
-  const shadowColor = useThemeColor(
-    { light: "#000", dark: "#000" },
-    "background"
-  );
-  const secondaryText = useThemeColor({}, "textSecondary");
-  const errorColor = "#FF3B30";
+  const { user: loggedInUser, signOut } = useAuth();
 
   const [users, setUsers] = useState<ApiUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +38,6 @@ const SettingsScreen = () => {
     }
   }, []);
 
-  // Initial Load
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -72,7 +62,7 @@ const SettingsScreen = () => {
 
   const renderUserItem = ({ item }: { item: ApiUser }) => (
     <TouchableOpacity
-      style={[styles.itemContainer, { backgroundColor: cardColor }]}
+      style={[styles.itemContainer, { backgroundColor: colors.card }]}
       onPress={() =>
         router.navigate({
           pathname: "/UserDetails",
@@ -80,16 +70,18 @@ const SettingsScreen = () => {
         })
       }
     >
-      <View style={styles.avatar}>
-        <Ionicons name="person" size={18} color={tint} />
+      <View
+        style={[styles.avatar, { backgroundColor: colors.avatarBackground }]}
+      >
+        <Ionicons name="person" size={18} color={colors.tint} />
       </View>
       <View style={styles.itemTextContainer}>
         <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={[styles.itemEmail, { color: secondaryText }]}>
+        <Text style={[styles.itemEmail, { color: colors.textSecondary }]}>
           {item.email}
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={secondaryText} />
+      <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
     </TouchableOpacity>
   );
 
@@ -99,39 +91,37 @@ const SettingsScreen = () => {
       <View
         style={[
           styles.accountCard,
-          { backgroundColor: cardColor, shadowColor },
+          { backgroundColor: colors.card, shadowColor: colors.shadow },
         ]}
       >
         <View style={styles.accountInfo}>
           <Text style={styles.itemName}>{loggedInUser?.name}</Text>
-          <Text style={[styles.itemEmail, { color: secondaryText }]}>
+          <Text style={[styles.itemEmail, { color: colors.textSecondary }]}>
             {loggedInUser?.email}
           </Text>
         </View>
-
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Ionicons name="log-out-outline" size={24} color={errorColor} />
+          <Ionicons name="log-out-outline" size={24} color={colors.error} />
         </TouchableOpacity>
       </View>
-
       <Text style={styles.headerTitle}>All Users (from API)</Text>
     </View>
   );
 
   if (isLoading && !refreshing) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={tint} />
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.tint} />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
         <Text>Error: {error}</Text>
         <TouchableOpacity onPress={loadData} style={{ marginTop: 10 }}>
-          <Text style={{ color: tint }}>Tap to Retry</Text>
+          <Text style={{ color: colors.tint }}>Tap to Retry</Text>
         </TouchableOpacity>
       </View>
     );
@@ -143,13 +133,13 @@ const SettingsScreen = () => {
       renderItem={renderUserItem}
       keyExtractor={(item) => item.id.toString()}
       ListHeaderComponent={renderListHeader}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.listContentContainer}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor={tint}
+          tintColor={colors.tint}
         />
       }
     />
@@ -171,7 +161,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingHorizontal: 15,
     paddingTop: 10,
-    marginBottom: 10,
   },
   headerTitle: {
     fontSize: 20,
@@ -208,7 +197,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "rgba(0,122,255,0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
