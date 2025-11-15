@@ -11,9 +11,7 @@ A pre-built APK is available for immediate testing.
 ## App Demo
 
 <p align="center">
-  <video src="./demo/app-demo.mp4" width="300" autoplay loop muted playsinline>
-    Your browser does not support the video tag.
-  </video>
+  <img src="./demo/app-demo.gif" width="300">
 </p>
 
 ## Features Implemented
