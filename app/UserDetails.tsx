@@ -143,6 +143,7 @@ const UserDetailsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 40,
   },
   centered: {
     flex: 1,
