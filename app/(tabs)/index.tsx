@@ -38,7 +38,7 @@ const HomeScreen = () => {
             color={colors.textSecondary}
             style={styles.icon}
           />
-          <View>
+          <View style={{ backgroundColor: colors.card }}>
             <Text style={styles.cardTitle}>Your Email</Text>
             <Text style={[styles.cardText, { color: colors.textSecondary }]}>
               {user?.email}

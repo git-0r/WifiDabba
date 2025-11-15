@@ -1,8 +1,9 @@
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
 import { useTheme } from "@/hooks/useTheme";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
+  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, {
   forwardRef,
@@ -38,7 +39,7 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
   const renderModalContent = () => {
     if (modalContent === "options") {
       return (
-        <View style={styles.modalContent}>
+        <BottomSheetView style={styles.modalContent}>
           <Text style={styles.modalTitle}>Get Started</Text>
           <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]}>
             Choose how you'd like to sign up.
@@ -59,7 +60,7 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
               Or Login
             </Text>
           </TouchableOpacity>
-        </View>
+        </BottomSheetView>
       );
     }
 
@@ -78,6 +79,7 @@ const AuthSheet = forwardRef<AuthSheetRef>((props, ref) => {
         snapPoints={snapPoints}
         backgroundStyle={{ backgroundColor: colors.background }}
         style={[styles.modalContainer, { shadowColor: colors.shadow }]}
+        enableDynamicSizing={false}
       >
         {renderModalContent()}
       </BottomSheetModal>

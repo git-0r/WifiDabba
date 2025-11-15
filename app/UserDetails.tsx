@@ -18,14 +18,16 @@ const InfoRow = ({
 }) => {
   const colors = useTheme();
   return (
-    <View style={styles.infoRow}>
+    <View style={[styles.infoRow, { backgroundColor: colors.card }]}>
       <Ionicons
         name={icon}
         size={20}
         color={colors.textSecondary}
         style={styles.infoIcon}
       />
-      <View style={styles.infoTextContainer}>
+      <View
+        style={[styles.infoTextContainer, { backgroundColor: colors.card }]}
+      >
         <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>
           {label}
         </Text>

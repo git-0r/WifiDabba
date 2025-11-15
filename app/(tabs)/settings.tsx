@@ -75,7 +75,9 @@ const SettingsScreen = () => {
       >
         <Ionicons name="person" size={18} color={colors.tint} />
       </View>
-      <View style={styles.itemTextContainer}>
+      <View
+        style={[styles.itemTextContainer, { backgroundColor: colors.card }]}
+      >
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={[styles.itemEmail, { color: colors.textSecondary }]}>
           {item.email}
@@ -94,7 +96,7 @@ const SettingsScreen = () => {
           { backgroundColor: colors.card, shadowColor: colors.shadow },
         ]}
       >
-        <View style={styles.accountInfo}>
+        <View style={[styles.accountInfo, { backgroundColor: colors.card }]}>
           <Text style={styles.itemName}>{loggedInUser?.name}</Text>
           <Text style={[styles.itemEmail, { color: colors.textSecondary }]}>
             {loggedInUser?.email}
