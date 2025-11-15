@@ -1,18 +1,21 @@
 import { Text, View } from "@/components/Themed";
-import Colors from "@/constants/Colors";
 import { OnboardingStep } from "@/types";
 import { Image } from "expo-image";
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, useColorScheme } from "react-native";
 
 const { width } = Dimensions.get("window");
-const blurhash = "L4RyseofRjt7~qt7j[j[t7Rja#j[";
+const blurhashLight = "L4RyseofRjt7~qt7j[j[t7Rja#j[";
+const blurhashDark = "L00000_20000_20000_20000";
 
 interface OnboardingSlideProps {
   item: OnboardingStep;
 }
 
 const OnboardingSlide = ({ item }: OnboardingSlideProps) => {
+  const colorScheme = useColorScheme() ?? "light";
+
+  const blurhash = colorScheme === "dark" ? blurhashDark : blurhashLight;
   return (
     <View style={[styles.slide, { width }]}>
       <Image
@@ -24,13 +27,7 @@ const OnboardingSlide = ({ item }: OnboardingSlideProps) => {
       />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text
-          style={styles.description}
-          lightColor={Colors.light.textSecondary}
-          darkColor={Colors.dark.textSecondary}
-        >
-          {item.description}
-        </Text>
+        <Text style={styles.description}>{item.description}</Text>
       </View>
     </View>
   );
