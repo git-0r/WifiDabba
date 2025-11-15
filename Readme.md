@@ -6,9 +6,15 @@ This is the completed take-home assignment for the Frontend Developer position a
 
 A pre-built APK is available for immediate testing.
 
-**[Download the APK from the latest GitHub Release](https://github.com/git-0r/WifiDabba/releases/latest)**
+**[Download the APK from the latest GitHub Release](https://github.com/git-0r/WifiDabba/releases)**
 
----
+## App Demo
+
+<p align="center">
+  <video src="./demo/app-demo.mp4" width="300" autoplay loop muted playsinline>
+    Your browser does not support the video tag.
+  </video>
+</p>
 
 ## Features Implemented
 
@@ -50,8 +56,6 @@ This project successfully fulfills all requirements outlined in the assignment b
 - **API Service Layer:** All `fetch` logic was abstracted into a dedicated `services/api.ts` file, separating data logic from view components.
 - **Error Handling:** All API-connected screens feature `isLoading` and `error` states, showing loading spinners and user-friendly error messages with a "Retry" option.
 
----
-
 ## Tech Stack
 
 - **Framework:** React Native (with Expo SDK)
@@ -60,8 +64,6 @@ This project successfully fulfills all requirements outlined in the assignment b
 - **State Management:** React Context (`AuthContext`)
 - **Local Storage:** `@react-native-async-storage/async-storage`
 - **Styling:** Centralized `useTheme` hook, `StyleSheet`
-
----
 
 ## How to Run Locally
 
