@@ -1,8 +1,12 @@
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
+import {
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet";
 import React, { useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 interface SignUpFormProps {
   onSuccess: () => void;
@@ -28,16 +32,19 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <BottomSheetScrollView
+      style={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.title}>Create your Account</Text>
-      <TextInput
+      <BottomSheetTextInput
         style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
         placeholder="Name"
         value={name}
         onChangeText={setName}
         placeholderTextColor={colors.textSecondary}
       />
-      <TextInput
+      <BottomSheetTextInput
         style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
         placeholder="Email"
         value={email}
@@ -57,7 +64,7 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
           Sign Up
         </Text>
       </TouchableOpacity>
-    </View>
+    </BottomSheetScrollView>
   );
 };
 
